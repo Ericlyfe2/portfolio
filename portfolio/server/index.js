@@ -18,7 +18,7 @@ app.get('/api/health', (req, res) => res.json({ ok: true }))
 <!-- Contact Form powered by StaticForms -->
 <form action="https://api.staticforms.dev/submit" method="POST">
   <!-- Your StaticForms API key -->
-  <input type="hidden" name="accessKey" value="your-api-key-here" />
+  <input type="hidden" name="accessKey" value="sf_270df540c066ca3aef7eb827" />
 
   <!-- Optional: redirect URL after submission -->
   <input type="hidden" name="redirectTo" value="https://yourdomain.com/thank-you" />
