@@ -1,5 +1,3 @@
-import { useState } from 'react'
-import axios from 'axios'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 
 const links = [
@@ -37,25 +35,6 @@ export default function Contact() {
   const header = useScrollReveal()
   const left = useScrollReveal()
   const right = useScrollReveal()
-
-  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
-  const [status, setStatus] = useState('idle')
-
-  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value })
-
-  const handleSubmit = async e => {
-    e.preventDefault()
-    setStatus('loading')
-    try {
-      await axios.post('/api/contact', form)
-      setStatus('success')
-      setForm({ name: '', email: '', subject: '', message: '' })
-      setTimeout(() => setStatus('idle'), 4000)
-    } catch {
-      setStatus('error')
-      setTimeout(() => setStatus('idle'), 4000)
-    }
-  }
 
   return (
     <section id="contact" className="relative z-10 section-padding bg-bg-base">
@@ -108,20 +87,22 @@ export default function Contact() {
         >
           <h3 className="text-xl font-semibold mb-6">Send a Message</h3>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form action="https://api.staticforms.dev/submit" method="POST" className="space-y-5">
+            <input type="hidden" name="accessKey" value="sf_270df540c066ca3aef7eb827" />
+            <input type="hidden" name="redirectTo" value="https://portfolio-ten-jade-55.vercel.app/#contact" />
+
             <div className="grid sm:grid-cols-2 gap-5">
-              <Field label="Your Name" name="name" value={form.name} onChange={handleChange} placeholder="John Doe" required />
-              <Field label="Email" name="email" type="email" value={form.email} onChange={handleChange} placeholder="john@example.com" required />
+              <Field label="Your Name" name="name" placeholder="John Doe" required />
+              <Field label="Email" name="email" type="email" placeholder="john@example.com" required />
             </div>
-            <Field label="Subject" name="subject" value={form.subject} onChange={handleChange} placeholder="Collaboration opportunity..." />
+            <Field label="Subject" name="subject" placeholder="Collaboration opportunity..." />
             <div>
               <label className="block text-xs text-slate-400 mb-2">Message</label>
               <textarea
                 name="message"
-                value={form.message}
-                onChange={handleChange}
                 placeholder="Tell me about your project or opportunity..."
                 rows={5}
+                required
                 className="w-full bg-white/[0.02] border border-[rgba(0,212,255,0.15)] rounded-xl
                   px-4 py-3 text-sm text-slate-200 placeholder-slate-600 resize-none
                   focus:outline-none focus:border-cyan focus:ring-1 focus:ring-cyan/20 transition-colors"
@@ -130,20 +111,11 @@ export default function Contact() {
 
             <button
               type="submit"
-              disabled={status === 'loading'}
-              className={`w-full py-3.5 rounded-xl text-sm font-semibold transition-all duration-300
+              className="w-full py-3.5 rounded-xl text-sm font-semibold transition-all duration-300
                 flex items-center justify-center gap-2
-                ${status === 'success'
-                  ? 'bg-gradient-to-r from-neon to-emerald-600 text-bg-base'
-                  : status === 'error'
-                  ? 'bg-red-500/80 text-white'
-                  : 'bg-gradient-to-r from-cyan-dk to-purple text-white hover:-translate-y-0.5 hover:shadow-cyan'
-                }`}
+                bg-gradient-to-r from-cyan-dk to-purple text-white hover:-translate-y-0.5 hover:shadow-cyan"
             >
-              {status === 'loading' && <i className="fas fa-spinner fa-spin" />}
-              {status === 'success' && <><i className="fas fa-check" /> Message Sent!</>}
-              {status === 'error'   && <><i className="fas fa-exclamation-circle" /> Failed. Try again.</>}
-              {status === 'idle'    && <><i className="fas fa-paper-plane text-xs" /> Send Message</>}
+              <i className="fas fa-paper-plane text-xs" /> Send Message
             </button>
           </form>
         </div>
@@ -152,15 +124,13 @@ export default function Contact() {
   )
 }
 
-function Field({ label, name, type = 'text', value, onChange, placeholder, required }) {
+function Field({ label, name, type = 'text', placeholder, required }) {
   return (
     <div>
       <label className="block text-xs text-slate-400 mb-2">{label}</label>
       <input
         type={type}
         name={name}
-        value={value}
-        onChange={onChange}
         placeholder={placeholder}
         required={required}
         className="w-full bg-white/[0.02] border border-[rgba(0,212,255,0.15)] rounded-xl
