@@ -15,27 +15,52 @@ app.use(express.json())
 app.get('/api/health', (req, res) => res.json({ ok: true }))
 
 // Contact form
-<!-- Contact Form powered by StaticForms -->
-<form action="https://api.staticforms.dev/submit" method="POST">
-  <!-- Your StaticForms API key -->
-  <input type="hidden" name="accessKey" value="sf_270df540c066ca3aef7eb827" />
+app.post('/api/contact', async (req, res) => {
+  const { name, email, subject, message } = req.body
 
-  <!-- Optional: redirect URL after submission -->
-  <input type="hidden" name="redirectTo" value="https://yourdomain.com/thank-you" />
+  if (!name || !email || !message) {
+    return res.status(400).json({ error: 'Name, email, and message are required.' })
+  }
 
-  <!-- Form fields -->
-  <label for="name">Name:</label>
-  <input type="text" id="name" name="name" required />
+  // If email credentials are configured, send via nodemailer
+  if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+    try {
+      const transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST || 'smtp.gmail.com',
+        port: 587,
+        secure: false,
+        auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
+      })
 
-  <label for="email">Email:</label>
-  <input type="email" id="email" name="email" required />
+      await transporter.sendMail({
+        from: `"Portfolio Contact" <${process.env.SMTP_USER}>`,
+        to: process.env.SMTP_USER,
+        subject: `[Portfolio] ${subject || 'New Message'} — from ${name}`,
+        html: `
+          <h2>New message from your portfolio</h2>
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Subject:</strong> ${subject || '—'}</p>
+          <hr />
+          <p>${message.replace(/\n/g, '<br>')}</p>
+        `,
+      })
+    } catch (err) {
+      console.error('Email error:', err)
+      return res.status(500).json({ error: 'Failed to send email.' })
+    }
+  } else {
+    // Dev mode — just log the message
+    console.log('\n📬 New contact form submission:')
+    console.log(`  Name: ${name}`)
+    console.log(`  Email: ${email}`)
+    console.log(`  Subject: ${subject}`)
+    console.log(`  Message: ${message}\n`)
+  }
 
-  <label for="subject">Subject:</label>
-  <input type="text" id="subject" name="subject" />
+  res.json({ ok: true, message: 'Message received!' })
+})
 
-  <label for="message">Message:</label>
-  <textarea id="message" name="message" required></textarea>
-
-  <button type="submit">Send Message</button>
-</form>
-
+app.listen(PORT, () => {
+  console.log(`🚀 Portfolio server running at http://localhost:${PORT}`)
+})
