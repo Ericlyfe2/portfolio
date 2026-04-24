@@ -14,7 +14,7 @@ app.use(express.json())
 // Health check
 app.get('/api/health', (req, res) => res.json({ ok: true }))
 
-// Contact form
+// Contact form powered by StaticForms
 app.post('/api/contact', async (req, res) => {
   const { name, email, subject, message } = req.body
 
