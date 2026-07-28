@@ -1,4 +1,4 @@
-import { useScrollReveal } from '../hooks/useScrollReveal'
+import { motion } from 'framer-motion'
 
 const topSkills = ['Bash', 'Internet Security', 'Cybersecurity']
 
@@ -42,24 +42,48 @@ const colorMap = {
   orange: { icon: 'bg-orange-500/10 text-orange-400', top: 'from-orange-400 to-orange-600' },
 }
 
-function SkillCard({ skill, delay }) {
-  const { ref, visible } = useScrollReveal()
+const cardVariants = {
+  hidden: { opacity: 0, y: 50, scale: 0.95 },
+  visible: i => ({
+    opacity: 1, y: 0, scale: 1,
+    transition: { delay: i * 0.12, duration: 0.5, ease: 'easeOut' },
+  }),
+}
+
+const sectionVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+}
+
+function SkillCard({ skill, index }) {
   const c = colorMap[skill.color]
 
   return (
-    <div
-      ref={ref}
-      style={{ transitionDelay: `${delay}ms` }}
-      className={`relative group glass rounded-2xl p-7 overflow-hidden
-        transition-all duration-500 hover:-translate-y-2 hover:border-cyan/40 hover:shadow-card
-        ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+    <motion.div
+      custom={index}
+      variants={cardVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-50px' }}
+      className="relative group glass rounded-2xl p-7 overflow-hidden
+        transition-all duration-500 hover:-translate-y-2 hover:border-cyan/40 hover:shadow-card"
+      whileHover={{ y: -8, transition: { duration: 0.2 } }}
     >
-      <div className={`absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r ${c.top}
-        scale-x-0 group-hover:scale-x-100 transition-transform duration-400 origin-left`} />
+      <motion.div
+        className={`absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r ${c.top}`}
+        initial={{ scaleX: 0 }}
+        whileHover={{ scaleX: 1 }}
+        transition={{ duration: 0.4 }}
+        style={{ transformOrigin: 'left' }}
+      />
 
-      <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl mb-4 ${c.icon}`}>
+      <motion.div
+        className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl mb-4 ${c.icon}`}
+        whileHover={{ rotate: 360, scale: 1.1 }}
+        transition={{ duration: 0.6 }}
+      >
         <i className={`fas ${skill.icon}`} />
-      </div>
+      </motion.div>
 
       <h4 className="text-base font-semibold mb-2">{skill.title}</h4>
       <p className="text-slate-400 text-sm leading-relaxed mb-4">{skill.desc}</p>
@@ -72,73 +96,86 @@ function SkillCard({ skill, delay }) {
           </span>
         ))}
       </div>
-    </div>
+    </motion.div>
   )
 }
 
 export default function Skills() {
-  const header = useScrollReveal()
-  const topBlock = useScrollReveal()
-  const langBlock = useScrollReveal()
-
   return (
     <section id="skills" className="relative z-10 section-padding bg-bg-base">
-      <div
-        ref={header.ref}
-        className={`mb-14 transition-all duration-700 ${header.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
+      <motion.div
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        className="mb-14"
       >
         <p className="font-mono text-xs text-cyan uppercase tracking-[3px] mb-3">// expertise</p>
         <h2 className="text-4xl font-bold mb-4">Technical <span className="gradient-text">Skills</span></h2>
         <p className="text-slate-400 max-w-lg leading-relaxed">
           Cybersecurity, networking, data, development, and Web3 — aligned with my experience at VRA, GRA, and KNUST.
         </p>
-      </div>
+      </motion.div>
 
-      <div
-        ref={topBlock.ref}
-        className={`glass rounded-2xl p-8 mb-10 transition-all duration-700
-          ${topBlock.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
+      <motion.div
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        className="glass rounded-2xl p-8 mb-10"
       >
         <p className="font-mono text-xs text-cyan uppercase tracking-[3px] mb-3">// top skills</p>
         <h3 className="text-xl font-semibold mb-4">Top skills</h3>
         <div className="flex flex-wrap gap-2">
-          {topSkills.map(s => (
-            <span
+          {topSkills.map((s, i) => (
+            <motion.span
               key={s}
               className="px-4 py-2 rounded-xl text-sm font-semibold font-mono text-cyan
-                bg-[rgba(0,212,255,0.08)] border border-[rgba(0,212,255,0.25)]"
+                bg-[rgba(0,212,255,0.08)] border border-[rgba(0,212,255,0.25)] cursor-default"
+              initial={{ opacity: 0, scale: 0 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1, type: 'spring', stiffness: 200 }}
+              whileHover={{ scale: 1.1, backgroundColor: 'rgba(0,212,255,0.15)' }}
             >
               {s}
-            </span>
+            </motion.span>
           ))}
         </div>
-      </div>
+      </motion.div>
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-6 mb-12">
         {skills.map((skill, i) => (
-          <SkillCard key={skill.title} skill={skill} delay={i * 80} />
+          <SkillCard key={skill.title} skill={skill} index={i} />
         ))}
       </div>
 
-      <div
-        ref={langBlock.ref}
-        className={`glass rounded-2xl p-8 transition-all duration-700
-          ${langBlock.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
+      <motion.div
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        className="glass rounded-2xl p-8"
       >
         <p className="font-mono text-xs text-cyan uppercase tracking-[3px] mb-3">// languages</p>
         <h3 className="text-xl font-semibold mb-4">Languages</h3>
         <div className="flex flex-wrap gap-2">
-          {languages.map(lang => (
-            <span
+          {languages.map((lang, i) => (
+            <motion.span
               key={lang}
               className="px-3 py-1.5 rounded-full text-sm font-mono text-slate-300
-                bg-white/[0.03] border border-[rgba(0,212,255,0.15)]"
+                bg-white/[0.03] border border-[rgba(0,212,255,0.15)] cursor-default"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1, duration: 0.4 }}
+              whileHover={{ scale: 1.08, borderColor: 'rgba(0,212,255,0.4)' }}
             >
               {lang}
-            </span>
+            </motion.span>
           ))}
         </div>
-      </div>
+      </motion.div>
     </section>
   )
 }

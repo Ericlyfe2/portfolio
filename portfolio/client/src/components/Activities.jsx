@@ -1,4 +1,4 @@
-import { useScrollReveal } from '../hooks/useScrollReveal'
+import { motion } from 'framer-motion'
 
 const activities = [
   {
@@ -56,19 +56,32 @@ const activities = [
   },
 ]
 
-function ActivityCard({ activity, delay }) {
-  const { ref, visible } = useScrollReveal()
+const cardVariants = {
+  hidden: { opacity: 0, y: 40, scale: 0.95 },
+  visible: i => ({
+    opacity: 1, y: 0, scale: 1,
+    transition: { delay: i * 0.1, duration: 0.5, ease: 'easeOut' },
+  }),
+}
 
+function ActivityCard({ activity, index }) {
   return (
-    <div
-      ref={ref}
-      style={{ transitionDelay: `${delay}ms` }}
-      className={`relative group glass rounded-2xl p-7 overflow-hidden
-        transition-all duration-500 hover:-translate-y-2 hover:shadow-card
-        ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+    <motion.div
+      custom={index}
+      variants={cardVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-30px' }}
+      className="relative group glass rounded-2xl p-7 overflow-hidden transition-all duration-500 hover:shadow-card"
+      whileHover={{ y: -8, transition: { duration: 0.2 } }}
     >
-      <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-cyan to-purple
-        scale-x-0 group-hover:scale-x-100 transition-transform duration-400" />
+      <motion.div
+        className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-cyan to-purple"
+        initial={{ scaleX: 0 }}
+        whileHover={{ scaleX: 1 }}
+        transition={{ duration: 0.4 }}
+        style={{ transformOrigin: 'left' }}
+      />
 
       <div className="flex items-center justify-between mb-5">
         <span className={`px-3 py-1 rounded-full text-xs font-medium ${activity.tag.cls}`}>
@@ -77,16 +90,31 @@ function ActivityCard({ activity, delay }) {
         <span className="font-mono text-xs text-slate-500">{activity.date}</span>
       </div>
 
-      <div className="text-3xl mb-3">{activity.emoji}</div>
+      <motion.div
+        className="text-3xl mb-3"
+        whileHover={{ scale: 1.2, rotate: [0, -10, 10, 0] }}
+        transition={{ duration: 0.4 }}
+      >
+        {activity.emoji}
+      </motion.div>
+
       <h4 className="text-base font-semibold mb-2 leading-snug">{activity.title}</h4>
       <p className={`text-slate-400 text-sm leading-relaxed ${activity.bullets ? 'mb-3' : 'mb-5'}`}>{activity.desc}</p>
+
       {activity.bullets && (
         <ul className="text-slate-400 text-sm leading-relaxed space-y-1.5 mb-5 list-none pl-0">
           {activity.bullets.map(b => (
-            <li key={b} className="flex gap-2">
+            <motion.li
+              key={b}
+              className="flex gap-2"
+              initial={{ opacity: 0, x: -10 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3 }}
+            >
               <span className="text-cyan shrink-0">•</span>
               {b}
-            </li>
+            </motion.li>
           ))}
         </ul>
       )}
@@ -99,29 +127,30 @@ function ActivityCard({ activity, delay }) {
           </span>
         ))}
       </div>
-    </div>
+    </motion.div>
   )
 }
 
 export default function Activities() {
-  const header = useScrollReveal()
-
   return (
     <section id="activities" className="relative z-10 section-padding bg-bg-2">
-      <div
-        ref={header.ref}
-        className={`mb-14 transition-all duration-700 ${header.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="mb-14"
       >
         <p className="font-mono text-xs text-cyan uppercase tracking-[3px] mb-3">// highlights</p>
         <h2 className="text-4xl font-bold mb-4">Achievements, <span className="gradient-text">Projects & Certifications</span></h2>
         <p className="text-slate-400 max-w-lg leading-relaxed">
           Certifications, awards, and projects that round out my profile beyond the classroom.
         </p>
-      </div>
+      </motion.div>
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {activities.map((a, i) => (
-          <ActivityCard key={a.title} activity={a} delay={i * 100} />
+          <ActivityCard key={a.title} activity={a} index={i} />
         ))}
       </div>
     </section>

@@ -9,11 +9,13 @@ import Activities from './components/Activities'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import ParticleCanvas from './components/ParticleCanvas'
+import Scene3D from './components/Scene3D'
 
 export default function App() {
   return (
     <div className="relative min-h-screen bg-bg-base text-slate-200">
       <ParticleCanvas />
+      <Scene3D />
       <Navbar />
       <main>
         <Hero />

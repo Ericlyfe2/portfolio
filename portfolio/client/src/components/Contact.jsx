@@ -1,4 +1,4 @@
-import { useScrollReveal } from '../hooks/useScrollReveal'
+import { motion } from 'framer-motion'
 
 const links = [
   {
@@ -31,25 +31,34 @@ const links = [
   },
 ]
 
-export default function Contact() {
-  const header = useScrollReveal()
-  const left = useScrollReveal()
-  const right = useScrollReveal()
+const linkVariants = {
+  hidden: { opacity: 0, x: -20 },
+  visible: i => ({
+    opacity: 1, x: 0,
+    transition: { delay: i * 0.1, duration: 0.4, ease: 'easeOut' },
+  }),
+}
 
+export default function Contact() {
   return (
     <section id="contact" className="relative z-10 section-padding bg-bg-base">
-      <div
-        ref={header.ref}
-        className={`mb-14 transition-all duration-700 ${header.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="mb-14"
       >
         <p className="font-mono text-xs text-cyan uppercase tracking-[3px] mb-3">// get in touch</p>
         <h2 className="text-4xl font-bold">Let&apos;s <span className="gradient-text">Connect</span></h2>
-      </div>
+      </motion.div>
 
       <div className="grid md:grid-cols-2 gap-16 items-start">
-        <div
-          ref={left.ref}
-          className={`transition-all duration-700 ${left.visible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}
+        <motion.div
+          initial={{ opacity: 0, x: -40 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: 'easeOut' }}
         >
           <h3 className="text-2xl font-semibold mb-4">Open to Opportunities</h3>
           <p className="text-slate-400 leading-relaxed mb-8">
@@ -58,32 +67,45 @@ export default function Contact() {
           </p>
 
           <div className="flex flex-col gap-4">
-            {links.map(({ icon, iconCls, label, sub, href }) => (
-              <a
+            {links.map(({ icon, iconCls, label, sub, href }, i) => (
+              <motion.a
                 key={label}
                 href={href}
                 target={href.startsWith('http') ? '_blank' : undefined}
                 rel={href.startsWith('http') ? 'noreferrer' : undefined}
-                className="flex items-center gap-4 p-4 glass rounded-xl
-                  hover:border-cyan/35 hover:translate-x-1.5 transition-all duration-300 group"
+                custom={i}
+                variants={linkVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="flex items-center gap-4 p-4 glass rounded-xl hover:border-cyan/35 transition-all duration-300 group"
+                whileHover={{ x: 6, transition: { duration: 0.2 } }}
               >
-                <div className={`w-11 h-11 rounded-xl flex items-center justify-center text-base ${iconCls}`}>
+                <motion.div
+                  className={`w-11 h-11 rounded-xl flex items-center justify-center text-base ${iconCls}`}
+                  whileHover={{ scale: 1.15, rotate: 5 }}
+                >
                   <i className={icon} />
-                </div>
+                </motion.div>
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-medium">{label}</div>
                   <div className="text-xs text-slate-500 mt-0.5 truncate">{sub}</div>
                 </div>
-                <i className="fas fa-arrow-right text-slate-500 text-xs group-hover:text-cyan transition-colors shrink-0" />
-              </a>
+                <motion.i
+                  className="fas fa-arrow-right text-slate-500 group-hover:text-cyan transition-colors shrink-0"
+                  whileHover={{ x: 3 }}
+                />
+              </motion.a>
             ))}
           </div>
-        </div>
+        </motion.div>
 
-        <div
-          ref={right.ref}
-          className={`glass rounded-2xl p-8 transition-all duration-700 delay-150
-            ${right.visible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}
+        <motion.div
+          initial={{ opacity: 0, x: 40 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: 'easeOut', delay: 0.15 }}
+          className="glass rounded-2xl p-8"
         >
           <h3 className="text-xl font-semibold mb-6">Send a Message</h3>
 
@@ -109,16 +131,18 @@ export default function Contact() {
               />
             </div>
 
-            <button
+            <motion.button
               type="submit"
               className="w-full py-3.5 rounded-xl text-sm font-semibold transition-all duration-300
                 flex items-center justify-center gap-2
-                bg-gradient-to-r from-cyan-dk to-purple text-white hover:-translate-y-0.5 hover:shadow-cyan"
+                bg-gradient-to-r from-cyan-dk to-purple text-white"
+              whileHover={{ scale: 1.02, boxShadow: '0 0 20px rgba(0,212,255,0.4)' }}
+              whileTap={{ scale: 0.98 }}
             >
               <i className="fas fa-paper-plane text-xs" /> Send Message
-            </button>
+            </motion.button>
           </form>
-        </div>
+        </motion.div>
       </div>
     </section>
   )
@@ -126,9 +150,14 @@ export default function Contact() {
 
 function Field({ label, name, type = 'text', placeholder, required }) {
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.3 }}
+    >
       <label className="block text-xs text-slate-400 mb-2">{label}</label>
-      <input
+      <motion.input
         type={type}
         name={name}
         placeholder={placeholder}
@@ -136,7 +165,8 @@ function Field({ label, name, type = 'text', placeholder, required }) {
         className="w-full bg-white/[0.02] border border-[rgba(0,212,255,0.15)] rounded-xl
           px-4 py-3 text-sm text-slate-200 placeholder-slate-600
           focus:outline-none focus:border-cyan focus:ring-1 focus:ring-cyan/20 transition-colors"
+        whileFocus={{ scale: 1.01, borderColor: 'rgba(0,212,255,0.4)' }}
       />
-    </div>
+    </motion.div>
   )
 }

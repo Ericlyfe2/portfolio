@@ -1,4 +1,4 @@
-import { useScrollReveal } from '../hooks/useScrollReveal'
+import { motion } from 'framer-motion'
 
 const shots = [
   {
@@ -15,32 +15,49 @@ const shots = [
   },
 ]
 
-function GalleryCard({ item, delay }) {
-  const { ref, visible } = useScrollReveal()
+const cardVariants = {
+  hidden: { opacity: 0, y: 60, scale: 0.9 },
+  visible: i => ({
+    opacity: 1, y: 0, scale: 1,
+    transition: { delay: i * 0.15, duration: 0.6, ease: 'easeOut' },
+  }),
+}
 
+function GalleryCard({ item, index }) {
   return (
-    <article
-      ref={ref}
-      style={{ transitionDelay: `${delay}ms` }}
-      className={`group relative transition-all duration-700
-        ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+    <motion.article
+      custom={index}
+      variants={cardVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-50px' }}
     >
-      <div
+      <motion.div
         className="relative overflow-hidden rounded-2xl glass border border-[rgba(0,212,255,0.12)] p-2 sm:p-3
-          shadow-card transition-all duration-500 hover:-translate-y-2
-          hover:shadow-[0_28px_56px_rgba(0,0,0,0.45)] hover:border-cyan/25"
+          shadow-card transition-all duration-500"
+        whileHover={{
+          y: -8,
+          boxShadow: '0 28px 56px rgba(0,0,0,0.45)',
+          borderColor: 'rgba(0,212,255,0.25)',
+        }}
       >
-        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-cyan to-purple
-          scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-cyan to-purple"
+          initial={{ scaleX: 0 }}
+          whileHover={{ scaleX: 1 }}
+          transition={{ duration: 0.5 }}
+          style={{ transformOrigin: 'left' }}
+        />
 
         <div className="relative overflow-hidden rounded-xl bg-bg-base/70 aspect-[3/4] sm:aspect-[4/5]">
-          <img
+          <motion.img
             src={item.src}
             alt={item.alt}
             loading="lazy"
             decoding="async"
-            className="absolute inset-0 h-full w-full object-cover object-center
-              transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+            className="absolute inset-0 h-full w-full object-cover object-center"
+            whileHover={{ scale: 1.08 }}
+            transition={{ duration: 0.7, ease: 'easeOut' }}
           />
           <div
             className="pointer-events-none absolute inset-0 rounded-xl opacity-90"
@@ -58,43 +75,45 @@ function GalleryCard({ item, delay }) {
             </p>
           </div>
         </div>
-      </div>
-    </article>
+      </motion.div>
+    </motion.article>
   )
 }
 
 export default function EventGallery() {
-  const header = useScrollReveal()
-
   return (
     <section id="gallery" className="relative z-10 section-padding bg-bg-3 overflow-hidden">
-      <div
+      <motion.div
         className="absolute inset-0 opacity-[0.035] pointer-events-none"
         style={{
           backgroundImage: `linear-gradient(rgba(0,212,255,0.6) 1px, transparent 1px),
             linear-gradient(90deg, rgba(0,212,255,0.6) 1px, transparent 1px)`,
           backgroundSize: '56px 56px',
         }}
+        animate={{ backgroundPosition: ['0px 0px', '56px 56px'] }}
+        transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
       />
 
       <div className="relative">
-        <div
-          ref={header.ref}
-          className={`mb-12 lg:mb-14 max-w-2xl transition-all duration-700
-            ${header.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mb-12 lg:mb-14 max-w-2xl"
         >
           <p className="font-mono text-xs text-cyan uppercase tracking-[3px] mb-3">// moments</p>
           <h2 className="text-4xl font-bold mb-4">
             Out in the <span className="gradient-text">community</span>
           </h2>
           <p className="text-slate-400 leading-relaxed">
-            Conferences, meetups, and the sponsors and peers that make Ghana’s tech scene thrive.
+            Conferences, meetups, and the sponsors and peers that make Ghana&apos;s tech scene thrive.
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid md:grid-cols-2 gap-8 lg:gap-10 items-stretch">
           {shots.map((item, i) => (
-            <GalleryCard key={item.src} item={item} delay={i * 120} />
+            <GalleryCard key={item.src} item={item} index={i} />
           ))}
         </div>
       </div>

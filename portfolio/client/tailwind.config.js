@@ -27,6 +27,10 @@ export default {
         'scroll-line': 'scrollLine 2s ease-in-out infinite',
         'progress': 'progressFill 1.5s ease forwards',
         'fadeInUp': 'fadeInUp 0.7s ease both',
+        'float': 'float 6s ease-in-out infinite',
+        'glow-pulse': 'glowPulse 3s ease-in-out infinite',
+        'drift': 'drift 8s ease-in-out infinite',
+        'shimmer': 'shimmer 3s linear infinite',
       },
       keyframes: {
         borderGlow: { '0%,100%': { filter: 'hue-rotate(0deg)' }, '50%': { filter: 'hue-rotate(180deg)' } },
@@ -34,6 +38,10 @@ export default {
         scrollLine: { '0%,100%': { transform: 'scaleY(1)', opacity: '1' }, '50%': { transform: 'scaleY(0.4)', opacity: '0.4' } },
         progressFill: { from: { width: '0%' }, to: { width: '75%' } },
         fadeInUp: { from: { opacity: '0', transform: 'translateY(28px)' }, to: { opacity: '1', transform: 'translateY(0)' } },
+        float: { '0%,100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-12px)' } },
+        glowPulse: { '0%,100%': { boxShadow: '0 0 20px rgba(0,212,255,0.2)' }, '50%': { boxShadow: '0 0 40px rgba(0,212,255,0.4)' } },
+        drift: { '0%,100%': { transform: 'translateX(0px) rotate(0deg)' }, '50%': { transform: 'translateX(8px) rotate(2deg)' } },
+        shimmer: { '0%': { backgroundPosition: '-200% 0' }, '100%': { backgroundPosition: '200% 0' } },
       },
       backdropBlur: { '2xl': '40px' },
       boxShadow: {

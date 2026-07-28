@@ -1,4 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
+import { motion } from 'framer-motion'
+import Hero3DObject from './Hero3DObject'
 
 const phrases = [
   'Student @ KNUST',
@@ -73,10 +75,71 @@ function StatItem({ target, label, suffix = '' }) {
   }, [])
 
   return (
-    <div ref={ref}>
-      <div className="text-3xl font-bold font-mono text-cyan">{val}{suffix}</div>
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+    >
+      <motion.div
+        className="text-3xl font-bold font-mono text-cyan"
+        initial={{ scale: 0 }}
+        whileInView={{ scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}
+      >
+        {val}{suffix}
+      </motion.div>
       <div className="text-xs text-slate-400 mt-1">{label}</div>
-    </div>
+    </motion.div>
+  )
+}
+
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.12 } },
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut' } },
+}
+
+function MagneticButton({ children, className, onClick, href }) {
+  const ref = useRef(null)
+  const [position, setPosition] = useState({ x: 0, y: 0 })
+
+  const handleMouse = (e) => {
+    if (!ref.current) return
+    const rect = ref.current.getBoundingClientRect()
+    const x = e.clientX - rect.left - rect.width / 2
+    const y = e.clientY - rect.top - rect.height / 2
+    setPosition({ x: x * 0.2, y: y * 0.2 })
+  }
+
+  const handleLeave = () => setPosition({ x: 0, y: 0 })
+
+  const handleClick = (e) => {
+    e.preventDefault()
+    document.getElementById(href)?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  return (
+    <motion.a
+      ref={ref}
+      href={`#${href}`}
+      onClick={handleClick}
+      className={className}
+      animate={{ x: position.x, y: position.y }}
+      transition={{ type: 'spring', stiffness: 150, damping: 8, mass: 0.1 }}
+      onMouseMove={handleMouse}
+      onMouseLeave={handleLeave}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+    >
+      {children}
+    </motion.a>
   )
 }
 
@@ -84,66 +147,94 @@ export default function Hero() {
   const typed = useTypewriter()
 
   return (
-    <section id="hero" className="relative z-10 min-h-screen flex items-center px-[10%]">
-      <div className="max-w-2xl">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[rgba(0,212,255,0.2)]
-          bg-[rgba(0,212,255,0.06)] text-cyan text-sm mb-7 animate-[fadeInUp_0.7s_ease_both]">
-          <span className="w-2 h-2 rounded-full bg-neon animate-pulse-slow" />
-          Accra, Ghana · Open to opportunities
-        </div>
+    <section id="hero" className="relative z-10 min-h-screen flex items-center px-[10%] overflow-hidden">
+      <Hero3DObject />
 
-        <h1 className="text-5xl md:text-7xl font-bold leading-tight mb-4 animate-[fadeInUp_0.7s_ease_0.15s_both]">
+      <motion.div
+        className="max-w-2xl"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.div
+          variants={itemVariants}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[rgba(0,212,255,0.2)]
+            bg-[rgba(0,212,255,0.06)] text-cyan text-sm mb-7"
+        >
+          <motion.span
+            className="w-2 h-2 rounded-full bg-neon"
+            animate={{ opacity: [1, 0.3, 1], scale: [1, 0.8, 1] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          Accra, Ghana · Open to opportunities
+        </motion.div>
+
+        <motion.h1
+          variants={itemVariants}
+          className="text-5xl md:text-7xl font-bold leading-tight mb-4"
+        >
           Hi, I&apos;m{' '}
           <span className="gradient-text">Eric Asante</span>
-        </h1>
+        </motion.h1>
 
-        <div className="font-mono text-cyan text-base md:text-lg mb-6 min-h-[1.75rem] animate-[fadeInUp_0.7s_ease_0.3s_both]">
+        <motion.div
+          variants={itemVariants}
+          className="font-mono text-cyan text-base md:text-lg mb-6 min-h-[1.75rem]"
+        >
           {typed}
-          <span className="inline-block w-0.5 h-5 bg-cyan ml-0.5 align-middle animate-blink" />
-        </div>
+          <motion.span
+            className="inline-block w-0.5 h-5 bg-cyan ml-0.5 align-middle"
+            animate={{ opacity: [1, 0] }}
+            transition={{ duration: 1, repeat: Infinity, repeatDelay: 0.5, ease: 'stepEnd' }}
+          />
+        </motion.div>
 
-        <p className="text-slate-400 leading-relaxed max-w-xl mb-9 text-base md:text-lg
-          animate-[fadeInUp_0.7s_ease_0.45s_both]">
+        <motion.p
+          variants={itemVariants}
+          className="text-slate-400 leading-relaxed max-w-xl mb-9 text-base md:text-lg"
+        >
           Computer Science student at KNUST. Cybersecurity, network administration, data analysis,
           Web3 &amp; blockchain — building with Python &amp; C#. Recently Academic Head at KNUST;
           DTI intern at Volta River Authority.
-        </p>
+        </motion.p>
 
-        <div className="flex flex-wrap gap-4 animate-[fadeInUp_0.7s_ease_0.6s_both]">
-          <a
-            href="#experience"
-            onClick={e => { e.preventDefault(); document.getElementById('experience')?.scrollIntoView({ behavior:'smooth' }) }}
+        <motion.div variants={itemVariants} className="flex flex-wrap gap-4">
+          <MagneticButton
+            href="experience"
             className="inline-flex items-center gap-2 px-7 py-3.5 rounded-lg font-semibold
-              bg-gradient-to-r from-cyan-dk to-purple text-white transition-all duration-300
-              hover:-translate-y-1 hover:shadow-cyan"
+              bg-gradient-to-r from-cyan-dk to-purple text-white cursor-pointer"
           >
             <i className="fas fa-briefcase text-sm" /> View Experience
-          </a>
-          <a
-            href="#contact"
-            onClick={e => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior:'smooth' }) }}
+          </MagneticButton>
+          <MagneticButton
+            href="contact"
             className="inline-flex items-center gap-2 px-7 py-3.5 rounded-lg font-semibold
-              border border-[rgba(0,212,255,0.25)] text-cyan transition-all duration-300
-              hover:bg-[rgba(0,212,255,0.07)] hover:-translate-y-1"
+              border border-[rgba(0,212,255,0.25)] text-cyan cursor-pointer"
           >
             <i className="fas fa-paper-plane text-sm" /> Get in Touch
-          </a>
-        </div>
+          </MagneticButton>
+        </motion.div>
 
-        <div className="flex flex-wrap gap-10 mt-14 pt-10 border-t border-[rgba(0,212,255,0.1)]
-          animate-[fadeInUp_0.7s_ease_0.75s_both]">
+        <motion.div
+          variants={itemVariants}
+          className="flex flex-wrap gap-10 mt-14 pt-10 border-t border-[rgba(0,212,255,0.1)]"
+        >
           <StatItem target={3} label="Top skills" />
           <StatItem target={2} label="Internships completed" />
           <StatItem target={4} label="Languages" />
           <StatItem target={3} label="Experience entries" />
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2
-        text-slate-500 text-xs animate-[fadeInUp_0.7s_ease_1s_both]">
+      <motion.div
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-slate-500 text-xs"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2, duration: 0.7 }}
+      >
         <span>scroll</span>
         <div className="w-px h-12 bg-gradient-to-b from-cyan to-transparent animate-scroll-line" />
-      </div>
+      </motion.div>
     </section>
   )
 }

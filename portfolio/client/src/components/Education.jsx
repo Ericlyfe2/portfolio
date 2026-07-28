@@ -1,4 +1,4 @@
-import { useScrollReveal } from '../hooks/useScrollReveal'
+import { motion } from 'framer-motion'
 
 const entries = [
   {
@@ -12,21 +12,30 @@ const entries = [
   },
 ]
 
-function EducationCard({ entry, delay }) {
-  const { ref, visible } = useScrollReveal()
+const cardVariants = {
+  hidden: { opacity: 0, y: 50, scale: 0.95 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: 'easeOut' } },
+}
 
+function EducationCard({ entry, delay }) {
   return (
-    <div
-      ref={ref}
-      style={{ transitionDelay: `${delay}ms` }}
-      className={`glass rounded-2xl p-8 md:p-10 flex flex-col md:flex-row gap-8 items-start md:items-center
-        hover:border-cyan/40 hover:-translate-y-1 transition-all duration-500 hover:shadow-card
-        ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+    <motion.div
+      variants={cardVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      transition={{ delay }}
+      className="glass rounded-2xl p-8 md:p-10 flex flex-col md:flex-row gap-8 items-start md:items-center
+        hover:border-cyan/40 transition-all duration-500 hover:shadow-card"
+      whileHover={{ y: -4, transition: { duration: 0.2 } }}
     >
-      <div className="w-20 h-20 shrink-0 rounded-2xl flex items-center justify-center text-4xl
-        bg-gradient-to-br from-cyan/15 to-purple/15 border border-[rgba(0,212,255,0.15)]">
+      <motion.div
+        className="w-20 h-20 shrink-0 rounded-2xl flex items-center justify-center text-4xl
+          bg-gradient-to-br from-cyan/15 to-purple/15 border border-[rgba(0,212,255,0.15)]"
+        whileHover={{ rotate: [0, -10, 10, -5, 0], transition: { duration: 0.5 } }}
+      >
         {entry.emoji}
-      </div>
+      </motion.div>
 
       <div className="flex-1">
         <h3 className="text-xl font-semibold mb-1">{entry.title}</h3>
@@ -42,43 +51,61 @@ function EducationCard({ entry, delay }) {
         </div>
 
         <div className="font-mono text-xs text-slate-400 flex flex-wrap items-center gap-3 mb-4">
-          <span className="flex items-center gap-1.5">
+          <motion.span
+            className="flex items-center gap-1.5"
+            whileHover={{ scale: 1.05 }}
+          >
             <i className="fas fa-calendar text-cyan" />
             {entry.period}
-          </span>
+          </motion.span>
           {entry.status && (
-            <span className="text-neon font-medium">{entry.status}</span>
+            <motion.span
+              className="text-neon font-medium"
+              animate={{ opacity: [1, 0.5, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              {entry.status}
+            </motion.span>
           )}
         </div>
 
         <div className="flex flex-wrap gap-2">
-          {entry.tags.map(t => (
-            <span key={t} className="px-2 py-0.5 rounded text-xs font-mono text-slate-400
-              bg-white/[0.03] border border-white/[0.07]">
+          {entry.tags.map((t, i) => (
+            <motion.span
+              key={t}
+              className="px-2 py-0.5 rounded text-xs font-mono text-slate-400
+                bg-white/[0.03] border border-white/[0.07] cursor-default"
+              initial={{ opacity: 0, scale: 0 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 + i * 0.1, type: 'spring', stiffness: 200 }}
+              whileHover={{ scale: 1.1, backgroundColor: 'rgba(0,212,255,0.08)' }}
+            >
               {t}
-            </span>
+            </motion.span>
           ))}
         </div>
       </div>
-    </div>
+    </motion.div>
   )
 }
 
 export default function Education() {
-  const header = useScrollReveal()
-
   return (
     <section id="education" className="relative z-10 section-padding bg-bg-base">
-      <div
-        ref={header.ref}
-        className={`mb-14 transition-all duration-700 ${header.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="mb-14"
       >
         <p className="font-mono text-xs text-cyan uppercase tracking-[3px] mb-3">// academic background</p>
         <h2 className="text-4xl font-bold mb-4"><span className="gradient-text">Education</span></h2>
         <p className="text-slate-400 max-w-lg leading-relaxed">
           Undergraduate degree in Computer Science at KNUST.
         </p>
-      </div>
+      </motion.div>
 
       <div className="max-w-2xl flex flex-col gap-6">
         {entries.map((entry, i) => (

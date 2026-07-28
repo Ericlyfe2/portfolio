@@ -1,4 +1,4 @@
-import { useScrollReveal } from '../hooks/useScrollReveal'
+import { motion } from 'framer-motion'
 
 const jobs = [
   {
@@ -57,19 +57,36 @@ const jobs = [
   },
 ]
 
-function TimelineItem({ job, delay }) {
-  const { ref, visible } = useScrollReveal()
+const timelineVariants = {
+  hidden: { opacity: 0, x: -30 },
+  visible: i => ({
+    opacity: 1, x: 0,
+    transition: { delay: i * 0.15, duration: 0.6, ease: 'easeOut' },
+  }),
+}
 
+function TimelineItem({ job, index }) {
   return (
-    <div
-      ref={ref}
-      style={{ transitionDelay: `${delay}ms` }}
-      className={`relative pl-10 mb-12 last:mb-0 transition-all duration-700
-        ${visible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-6'}`}
+    <motion.div
+      custom={index}
+      variants={timelineVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-50px' }}
+      className="relative pl-10 mb-12 last:mb-0"
     >
-      <div className={`absolute left-[-5px] top-1 w-3.5 h-3.5 rounded-full border-2 border-bg-2 ${job.dot}`} />
+      <motion.div
+        className={`absolute left-[-5px] top-1 w-3.5 h-3.5 rounded-full border-2 border-bg-2 ${job.dot}`}
+        initial={{ scale: 0 }}
+        whileInView={{ scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.2, type: 'spring', stiffness: 300 }}
+      />
 
-      <div className="glass rounded-2xl p-7 hover:border-cyan/35 hover:translate-x-1.5 transition-all duration-300">
+      <motion.div
+        className="glass rounded-2xl p-7 hover:border-cyan/35 transition-all duration-300"
+        whileHover={{ x: 6, transition: { duration: 0.2 } }}
+      >
         <div className="flex flex-wrap justify-between items-start gap-3 mb-2">
           <span className="text-lg font-semibold">{job.role}</span>
           <span className={`px-3 py-1 rounded-full text-xs font-medium ${job.badge.cls}`}>
@@ -77,20 +94,30 @@ function TimelineItem({ job, delay }) {
           </span>
         </div>
 
-        <div className="flex items-center gap-1.5 text-cyan text-sm mb-1">
+        <motion.div
+          className="flex items-center gap-1.5 text-cyan text-sm mb-1"
+          whileHover={{ x: 3 }}
+        >
           <i className={`fas ${job.icon} text-xs`} />
           {job.company}
-        </div>
+        </motion.div>
         <div className="font-mono text-xs text-slate-400 mb-5">
           {job.period} · {job.type} · {job.location}
         </div>
 
         <ul className="space-y-2 mb-5">
           {job.bullets.map((b, i) => (
-            <li key={i} className="text-slate-400 text-sm leading-relaxed flex gap-2">
+            <motion.li
+              key={i}
+              className="text-slate-400 text-sm leading-relaxed flex gap-2"
+              initial={{ opacity: 0, x: -10 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 + i * 0.05, duration: 0.3 }}
+            >
               <span className="text-cyan mt-0.5 shrink-0">▸</span>
               {b}
-            </li>
+            </motion.li>
           ))}
         </ul>
 
@@ -102,31 +129,32 @@ function TimelineItem({ job, delay }) {
             </span>
           ))}
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 }
 
 export default function Experience() {
-  const header = useScrollReveal()
-
   return (
     <section id="experience" className="relative z-10 section-padding bg-bg-2">
-      <div
-        ref={header.ref}
-        className={`mb-14 transition-all duration-700 ${header.visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="mb-14"
       >
         <p className="font-mono text-xs text-cyan uppercase tracking-[3px] mb-3">// experience</p>
         <h2 className="text-4xl font-bold mb-4">Work <span className="gradient-text">Experience</span></h2>
         <p className="text-slate-400 max-w-lg leading-relaxed">
           Internships in cybersecurity and data, plus academic leadership at KNUST.
         </p>
-      </div>
+      </motion.div>
 
       <div className="relative pl-4 border-l-2"
         style={{ borderImage: 'linear-gradient(to bottom, #00d4ff, #7c3aed, transparent) 1' }}>
         {jobs.map((job, i) => (
-          <TimelineItem key={`${job.role}-${job.company}`} job={job} delay={i * 120} />
+          <TimelineItem key={`${job.role}-${job.company}`} job={job} index={i} />
         ))}
       </div>
     </section>
