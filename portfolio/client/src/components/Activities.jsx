@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import DotField from './DotField'
+import ElectricBorder from './ElectricBorder'
 
 const activities = [
   {
@@ -116,6 +117,7 @@ const cardVariants = {
 
 function ActivityCard({ activity, index }) {
   return (
+    <ElectricBorder color="#00d4ff" speed={0.7} chaos={0.06} borderRadius={16}>
     <motion.div
       custom={index}
       variants={cardVariants}
@@ -192,6 +194,7 @@ function ActivityCard({ activity, index }) {
         ))}
       </div>
     </motion.div>
+    </ElectricBorder>
   )
 }
 

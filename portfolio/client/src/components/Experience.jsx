@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import ElectricBorder from './ElectricBorder'
 
 const jobs = [
   {
@@ -78,53 +79,55 @@ function TimelineItem({ job, index }) {
         transition={{ delay: 0.2, type: 'spring', stiffness: 300 }}
       />
 
-      <motion.div
-        className="glass rounded-2xl p-7 hover:border-cyan/35 transition-all duration-300"
-        whileHover={{ x: 6, transition: { duration: 0.2 } }}
-      >
-        <div className="flex flex-wrap justify-between items-start gap-3 mb-2">
-          <span className="text-lg font-semibold">{job.role}</span>
-          <span className={`px-3 py-1 rounded-full text-xs font-medium ${job.badge.cls}`}>
-            {job.badge.label}
-          </span>
-        </div>
-
+      <ElectricBorder color="#00d4ff" speed={0.7} chaos={0.06} borderRadius={16}>
         <motion.div
-          className="flex items-center gap-1.5 text-cyan text-sm mb-1"
-          whileHover={{ x: 3 }}
+          className="glass rounded-2xl p-7 transition-all duration-300"
+          whileHover={{ x: 6, transition: { duration: 0.2 } }}
         >
-          <i className={`fas ${job.icon} text-xs`} />
-          {job.company}
-        </motion.div>
-        <div className="font-mono text-xs text-slate-400 mb-5">
-          {job.period} · {job.type} · {job.location}
-        </div>
-
-        <ul className="space-y-2 mb-5">
-          {job.bullets.map((b, i) => (
-            <motion.li
-              key={i}
-              className="text-slate-400 text-sm leading-relaxed flex gap-2"
-              initial={{ opacity: 0, x: -10 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 + i * 0.05, duration: 0.3 }}
-            >
-              <span className="text-cyan mt-0.5 shrink-0">▸</span>
-              {b}
-            </motion.li>
-          ))}
-        </ul>
-
-        <div className="flex flex-wrap gap-1.5">
-          {job.tags.map(t => (
-            <span key={t} className="px-2 py-0.5 rounded text-xs font-mono text-slate-400
-              bg-white/[0.03] border border-white/[0.07]">
-              {t}
+          <div className="flex flex-wrap justify-between items-start gap-3 mb-2">
+            <span className="text-lg font-semibold">{job.role}</span>
+            <span className={`px-3 py-1 rounded-full text-xs font-medium ${job.badge.cls}`}>
+              {job.badge.label}
             </span>
-          ))}
-        </div>
-      </motion.div>
+          </div>
+
+          <motion.div
+            className="flex items-center gap-1.5 text-cyan text-sm mb-1"
+            whileHover={{ x: 3 }}
+          >
+            <i className={`fas ${job.icon} text-xs`} />
+            {job.company}
+          </motion.div>
+          <div className="font-mono text-xs text-slate-400 mb-5">
+            {job.period} · {job.type} · {job.location}
+          </div>
+
+          <ul className="space-y-2 mb-5">
+            {job.bullets.map((b, i) => (
+              <motion.li
+                key={i}
+                className="text-slate-400 text-sm leading-relaxed flex gap-2"
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 + i * 0.05, duration: 0.3 }}
+              >
+                <span className="text-cyan mt-0.5 shrink-0">▸</span>
+                {b}
+              </motion.li>
+            ))}
+          </ul>
+
+          <div className="flex flex-wrap gap-1.5">
+            {job.tags.map(t => (
+              <span key={t} className="px-2 py-0.5 rounded text-xs font-mono text-slate-400
+                bg-white/[0.03] border border-white/[0.07]">
+                {t}
+              </span>
+            ))}
+          </div>
+        </motion.div>
+      </ElectricBorder>
     </motion.div>
   )
 }

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import LiquidChrome from './LiquidChrome'
+import ElectricBorder from './ElectricBorder'
 
 const links = [
   {
@@ -110,8 +111,9 @@ export default function Contact() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, ease: 'easeOut', delay: 0.15 }}
-          className="glass rounded-2xl p-8"
         >
+        <ElectricBorder color="#7c3aed" speed={0.8} chaos={0.08} borderRadius={16}>
+        <div className="glass rounded-2xl p-8">
           <h3 className="text-xl font-semibold mb-6">Send a Message</h3>
 
           <form action="https://api.staticforms.dev/submit" method="POST" className="space-y-5">
@@ -147,6 +149,8 @@ export default function Contact() {
               <i className="fas fa-paper-plane text-xs" /> Send Message
             </motion.button>
           </form>
+        </div>
+        </ElectricBorder>
         </motion.div>
       </div>
     </section>

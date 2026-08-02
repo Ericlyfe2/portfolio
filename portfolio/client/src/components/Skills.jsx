@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import TrueFocus from './TrueFocus'
+import ElectricBorder from './ElectricBorder'
 
 const topSkills = ['Bash', 'Internet Security', 'Cybersecurity']
 
@@ -37,10 +38,10 @@ const skills = [
 const languages = ['English', 'French', 'Twi']
 
 const colorMap = {
-  cyan:   { icon: 'bg-cyan/10 text-cyan',      top: 'from-cyan to-cyan-dk' },
-  purple: { icon: 'bg-purple/15 text-purple-lt', top: 'from-purple-lt to-purple' },
-  neon:   { icon: 'bg-neon/10 text-neon',       top: 'from-neon to-emerald-600' },
-  orange: { icon: 'bg-orange-500/10 text-orange-400', top: 'from-orange-400 to-orange-600' },
+  cyan:   { icon: 'bg-cyan/10 text-cyan',      top: 'from-cyan to-cyan-dk',      hex: '#00d4ff' },
+  purple: { icon: 'bg-purple/15 text-purple-lt', top: 'from-purple-lt to-purple', hex: '#7c3aed' },
+  neon:   { icon: 'bg-neon/10 text-neon',       top: 'from-neon to-emerald-600', hex: '#00ff88' },
+  orange: { icon: 'bg-orange-500/10 text-orange-400', top: 'from-orange-400 to-orange-600', hex: '#fb923c' },
 }
 
 const cardVariants = {
@@ -60,44 +61,46 @@ function SkillCard({ skill, index }) {
   const c = colorMap[skill.color]
 
   return (
-    <motion.div
-      custom={index}
-      variants={cardVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: '-50px' }}
-      className="relative group glass rounded-2xl p-7 overflow-hidden
-        transition-all duration-500 hover:-translate-y-2 hover:border-cyan/40 hover:shadow-card"
-      whileHover={{ y: -8, transition: { duration: 0.2 } }}
-    >
+    <ElectricBorder color={c.hex} speed={0.7} chaos={0.06} borderRadius={16}>
       <motion.div
-        className={`absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r ${c.top}`}
-        initial={{ scaleX: 0 }}
-        whileHover={{ scaleX: 1 }}
-        transition={{ duration: 0.4 }}
-        style={{ transformOrigin: 'left' }}
-      />
-
-      <motion.div
-        className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl mb-4 ${c.icon}`}
-        whileHover={{ rotate: 360, scale: 1.1 }}
-        transition={{ duration: 0.6 }}
+        custom={index}
+        variants={cardVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-50px' }}
+        className="relative group glass rounded-2xl p-7 overflow-hidden
+          transition-all duration-500 hover:-translate-y-2 hover:shadow-card"
+        whileHover={{ y: -8, transition: { duration: 0.2 } }}
       >
-        <i className={`fas ${skill.icon}`} />
+        <motion.div
+          className={`absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r ${c.top}`}
+          initial={{ scaleX: 0 }}
+          whileHover={{ scaleX: 1 }}
+          transition={{ duration: 0.4 }}
+          style={{ transformOrigin: 'left' }}
+        />
+
+        <motion.div
+          className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl mb-4 ${c.icon}`}
+          whileHover={{ rotate: 360, scale: 1.1 }}
+          transition={{ duration: 0.6 }}
+        >
+          <i className={`fas ${skill.icon}`} />
+        </motion.div>
+
+        <h4 className="text-base font-semibold mb-2">{skill.title}</h4>
+        <p className="text-slate-400 text-sm leading-relaxed mb-4">{skill.desc}</p>
+
+        <div className="flex flex-wrap gap-1.5">
+          {skill.tags.map(t => (
+            <span key={t} className="px-2 py-0.5 rounded text-xs font-mono text-slate-400
+              bg-white/[0.03] border border-white/[0.07]">
+              {t}
+            </span>
+          ))}
+        </div>
       </motion.div>
-
-      <h4 className="text-base font-semibold mb-2">{skill.title}</h4>
-      <p className="text-slate-400 text-sm leading-relaxed mb-4">{skill.desc}</p>
-
-      <div className="flex flex-wrap gap-1.5">
-        {skill.tags.map(t => (
-          <span key={t} className="px-2 py-0.5 rounded text-xs font-mono text-slate-400
-            bg-white/[0.03] border border-white/[0.07]">
-            {t}
-          </span>
-        ))}
-      </div>
-    </motion.div>
+    </ElectricBorder>
   )
 }
 

@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import ElectricBorder from './ElectricBorder'
 
 const entries = [
   {
@@ -19,6 +20,7 @@ const cardVariants = {
 
 function EducationCard({ entry, delay }) {
   return (
+    <ElectricBorder color="#7c3aed" speed={0.7} chaos={0.06} borderRadius={16}>
     <motion.div
       variants={cardVariants}
       initial="hidden"
@@ -26,7 +28,7 @@ function EducationCard({ entry, delay }) {
       viewport={{ once: true }}
       transition={{ delay }}
       className="glass rounded-2xl p-8 md:p-10 flex flex-col md:flex-row gap-8 items-start md:items-center
-        hover:border-cyan/40 transition-all duration-500 hover:shadow-card"
+        transition-all duration-500 hover:shadow-card"
       whileHover={{ y: -4, transition: { duration: 0.2 } }}
     >
       <motion.div
@@ -87,6 +89,7 @@ function EducationCard({ entry, delay }) {
         </div>
       </div>
     </motion.div>
+    </ElectricBorder>
   )
 }
 

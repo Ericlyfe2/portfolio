@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion'
 import DecryptedText from './DecryptedText'
+import ProfileCard from './ProfileCard'
+import ElectricBorder from './ElectricBorder'
 
 const chips = [
   'Bash', 'Internet Security', 'Cybersecurity',
@@ -29,71 +31,19 @@ export default function About() {
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.8, ease: 'easeOut' }}
         >
-          <div className="relative flex items-center justify-center">
-            <motion.div
-              className="absolute w-[360px] h-[360px] rounded-full border border-dashed border-cyan/20"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+          <ElectricBorder color="#00d4ff" speed={1} chaos={0.1} borderRadius={30} style={{ maxWidth: '340px' }}>
+            <ProfileCard
+              name="Eric Asante"
+              title="Software Engineering & Cybersecurity Intern"
+              handle="Ericlyfe2"
+              status="Open to opportunities"
+              contactText="Contact Me"
+              avatarUrl="/profile.png"
+              showUserInfo={true}
+              enableTilt={true}
+              onContactClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
             />
-            <motion.div
-              className="absolute w-[310px] h-[310px] rounded-full border border-dashed border-purple/20"
-              animate={{ rotate: -360 }}
-              transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
-            />
-
-            <div className="relative h-64 w-64">
-              <motion.div
-                className="relative h-full w-full overflow-hidden rounded-2xl
-                  bg-gradient-to-br from-bg-3 to-bg-base border border-[rgba(0,212,255,0.15)]
-                  shadow-[0_0_40px_rgba(0,212,255,0.08)]"
-                whileHover={{ scale: 1.03, boxShadow: '0 0 60px rgba(0,212,255,0.2)' }}
-                transition={{ duration: 0.3 }}
-              >
-                <img
-                  src="/profile.png"
-                  alt="Eric Asante — graduation portrait at KNUST"
-                  className="absolute inset-0 z-0 h-full w-full object-cover object-[center_15%]"
-                  loading="lazy"
-                  decoding="async"
-                />
-
-                <div
-                  className="pointer-events-none absolute inset-0 z-10 rounded-2xl"
-                  style={{
-                    background: 'linear-gradient(135deg, #00d4ff, #7c3aed, #00d4ff)',
-                    padding: '2px',
-                    WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-                    WebkitMaskComposite: 'xor',
-                    maskComposite: 'exclude',
-                    animation: 'borderGlow 4s linear infinite',
-                  }}
-                />
-              </motion.div>
-
-              <motion.div
-                className="absolute -top-4 -right-6 z-20 max-w-[220px] px-3 py-1.5 rounded-xl glass text-xs font-mono text-cyan
-                  border border-[rgba(0,212,255,0.3)] shadow-card leading-snug"
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3, duration: 0.5 }}
-                whileHover={{ scale: 1.05, x: 4 }}
-              >
-                Cybersecurity &amp; Network Admin
-              </motion.div>
-              <motion.div
-                className="absolute -bottom-4 -left-6 z-20 px-3 py-1.5 rounded-xl glass text-xs font-mono text-purple-lt
-                  border border-purple/30 whitespace-nowrap shadow-card"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.5, duration: 0.5 }}
-                whileHover={{ scale: 1.05, x: -4 }}
-              >
-                Student @ KNUST
-              </motion.div>
-            </div>
-          </div>
+          </ElectricBorder>
         </motion.div>
 
         <motion.div
