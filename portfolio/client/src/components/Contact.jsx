@@ -1,19 +1,20 @@
 import { motion } from 'framer-motion'
+import LiquidChrome from './LiquidChrome'
 
 const links = [
   {
     icon: 'fas fa-phone',
     iconCls: 'bg-neon/10 text-neon',
-    label: 'Phone (Home)',
-    sub: '0596651140',
+    label: 'Phone',
+    sub: '+233 596 651 140',
     href: 'tel:+233596651140',
   },
   {
     icon: 'fas fa-envelope',
     iconCls: 'bg-cyan/10 text-cyan',
     label: 'Email',
-    sub: 'nicklaus4lyfe30@gmail.com',
-    href: 'mailto:nicklaus4lyfe30@gmail.com',
+    sub: 'ericlyfe2@gmail.com',
+    href: 'mailto:ericlyfe2@gmail.com',
   },
   {
     icon: 'fab fa-linkedin-in',
@@ -41,7 +42,11 @@ const linkVariants = {
 
 export default function Contact() {
   return (
-    <section id="contact" className="relative z-10 section-padding bg-bg-base">
+    <section id="contact" className="relative z-10 section-padding bg-bg-base overflow-hidden">
+      <div className="absolute inset-0 opacity-20 pointer-events-none">
+        <LiquidChrome baseColor={[0.02, 0.08, 0.1]} speed={0.4} amplitude={0.35} interactive={false} />
+      </div>
+
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}

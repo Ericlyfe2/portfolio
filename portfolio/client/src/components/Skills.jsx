@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import TrueFocus from './TrueFocus'
 
 const topSkills = ['Bash', 'Internet Security', 'Cybersecurity']
 
@@ -13,27 +14,27 @@ const skills = [
   {
     icon: 'fa-chart-bar',
     color: 'purple',
-    title: 'Data Analysis',
+    title: 'Data Analysis & Databases',
     desc: 'Working with data integrity, diagnostics, and practical analytics in IT environments.',
-    tags: ['Data Analysis', 'SQL', 'Database troubleshooting'],
+    tags: ['Data Analysis', 'SQL', 'MySQL', 'MongoDB', 'Database troubleshooting'],
   },
   {
     icon: 'fa-code',
     color: 'neon',
     title: 'Web & Development',
-    desc: 'Web development and application building with Python, C#, and modern tooling.',
-    tags: ['Python', 'C#', 'Web development', 'HTML & CSS'],
+    desc: 'Full-stack web development and application building with Python, C#, JavaScript, and modern tooling.',
+    tags: ['Python', 'C#', 'JavaScript', 'HTML', 'CSS', 'Web development'],
   },
   {
-    icon: 'fa-cubes',
+    icon: 'fa-layer-group',
     color: 'orange',
-    title: 'Web3 & Blockchain',
-    desc: 'Exploring decentralized technology and blockchain ecosystems alongside core CS skills.',
-    tags: ['Web3', 'Blockchain'],
+    title: 'Frameworks & Platforms',
+    desc: 'Building on modern frameworks and platforms, with working knowledge of cloud computing and Web3 fundamentals.',
+    tags: ['.NET', 'Node.js', 'Firebase', 'Web3 / Blockchain', 'Cloud computing'],
   },
 ]
 
-const languages = ['English', 'French', 'Twi', 'Spanish']
+const languages = ['English', 'French', 'Twi']
 
 const colorMap = {
   cyan:   { icon: 'bg-cyan/10 text-cyan',      top: 'from-cyan to-cyan-dk' },
@@ -111,7 +112,17 @@ export default function Skills() {
         className="mb-14"
       >
         <p className="font-mono text-xs text-cyan uppercase tracking-[3px] mb-3">// expertise</p>
-        <h2 className="text-4xl font-bold mb-4">Technical <span className="gradient-text">Skills</span></h2>
+        <h2 className="text-4xl font-bold mb-4">
+          <TrueFocus
+            sentence="Technical Skills"
+            manualMode={false}
+            blurAmount={4}
+            borderColor="#00d4ff"
+            glowColor="rgba(0, 212, 255, 0.6)"
+            animationDuration={0.6}
+            pauseBetweenAnimations={1.2}
+          />
+        </h2>
         <p className="text-slate-400 max-w-lg leading-relaxed">
           Cybersecurity, networking, data, development, and Web3 — aligned with my experience at VRA, GRA, and KNUST.
         </p>

@@ -1,8 +1,10 @@
 import { motion } from 'framer-motion'
+import DecryptedText from './DecryptedText'
 
 const chips = [
   'Bash', 'Internet Security', 'Cybersecurity',
-  'Python', 'C#', 'Web3', 'Blockchain',
+  'Python', 'C#', 'JavaScript', '.NET', 'Node.js',
+  'MySQL', 'MongoDB', 'Firebase', 'Web3', 'Blockchain',
   'Data Analysis', 'Network Administration', 'Web development',
 ]
 
@@ -102,24 +104,33 @@ export default function About() {
         >
           <motion.p variants={itemVariants} className="font-mono text-xs text-cyan uppercase tracking-[3px] mb-3">// about me</motion.p>
           <motion.h2 variants={itemVariants} className="text-4xl font-bold mb-2">
-            Eric Asante
+            <DecryptedText
+              text="Eric Asante"
+              animateOn="view"
+              sequential
+              revealDirection="center"
+              speed={30}
+              useOriginalCharsOnly
+              encryptedClassName="text-slate-500"
+            />
           </motion.h2>
           <motion.p variants={itemVariants} className="text-slate-400 text-sm leading-relaxed mb-6 border-l-2 border-cyan/40 pl-4">
-            Student @ KNUST · DTI Intern @ Volta River Authority · Cybersecurity &amp; Network Administration ·
-            Data Analysis · Web3 &amp; Blockchain · Python &amp; C# Developer ·{' '}
+            Software Engineering &amp; Cybersecurity Intern @ Volta River Authority (DTI) · Final-year BSc Computer
+            Science @ KNUST · Full-Stack Developer (Python, C#/.NET, Node.js, MySQL, MongoDB) ·{' '}
             <span className="text-slate-500">Accra, Greater Accra Region, Ghana</span>
           </motion.p>
 
           <motion.h3 variants={itemVariants} className="text-lg font-semibold text-slate-200 mb-3">Summary</motion.h3>
           <motion.p variants={itemVariants} className="text-slate-400 leading-relaxed mb-4">
-            I am a student at Kwame Nkrumah University of Science and Technology, passionate about technology and
-            innovation. I have growing experience in software development, IT infrastructure, and cloud services.
+            Software engineering and cybersecurity intern at the Volta River Authority (DTI Office), building and
+            securing applications inside a national critical-infrastructure environment, with prior hands-on
+            experience administering networks, servers and firewalls at the Ghana Revenue Authority.
           </motion.p>
           <motion.p variants={itemVariants} className="text-slate-400 leading-relaxed mb-6">
-            I enjoy combining creative ideas with practical solutions to build useful and efficient applications.
-            I&apos;m detail-oriented, a strong team player, and capable of managing multiple projects effectively.
-            I&apos;m especially interested in web development, blockchain, and cloud computing, and I&apos;m always
-            eager to learn, grow, and take on new challenges.
+            Full-stack developer in Python, C#/.NET, Node.js, MySQL and MongoDB, with working knowledge of cloud
+            platforms, network infrastructure and information security. Final-year BSc Computer Science candidate at
+            KNUST (2026) and elected leader representing 500+ students, seeking to grow within Huawei Ghana&apos;s
+            ICT and technology ecosystem.
           </motion.p>
 
           <motion.div variants={itemVariants} className="flex flex-wrap gap-2">

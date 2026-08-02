@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import DotField from './DotField'
 
 const activities = [
   {
@@ -27,18 +28,43 @@ const activities = [
   },
   {
     tag: { label: 'Project & Research', cls: 'bg-cyan/10 text-cyan border border-cyan/20' },
-    date: 'Full-stack mobile',
-    title: 'Crescendo – Full-Stack Mobile Application',
-    desc: 'A functional music streaming platform inspired by Spotify.',
+    date: 'Final-year group project · 2025/2026',
+    title: 'GlobalBridge — All-in-One Platform for International Students',
+    desc: 'Co-developed an all-in-one platform for international students and immigrants, unifying AI-guided visa support, a verified housing marketplace, scholarship & job matching, mentorship, and a settling-in toolkit into a single role-aware product.',
     bullets: [
-      'Developed front-end and back-end systems.',
-      'Implemented responsive design and dynamic content rendering.',
-      'Showcased proficiency in full-stack development and UI/UX.',
+      'Implemented real-time messaging over WebSockets and an AI toolkit (document checker, scholarship matcher, country comparison, essay scoring).',
+      'Built an admin moderation console and internationalization across 14 languages with dark-mode support.',
     ],
     footer: [
-      { icon: 'fa-mobile-screen', label: 'Mobile' },
-      { icon: 'fa-layer-group', label: 'Full-stack' },
-      { icon: 'fa-music', label: 'Streaming' },
+      { icon: 'fa-plane-departure', label: 'Visa support' },
+      { icon: 'fa-comments', label: 'Real-time chat' },
+      { icon: 'fa-language', label: '14 languages' },
+    ],
+    emoji: '🌍',
+    href: 'https://global-bridge-nu.vercel.app',
+  },
+  {
+    tag: { label: 'Venture', cls: 'bg-orange-500/10 text-orange-400 border border-orange-500/25' },
+    date: 'Software venture',
+    title: 'Noventra Technologies',
+    desc: 'Software development venture designing, building and maintaining modern web applications, mobile applications, cloud-based platforms and custom business software for individuals, startups and SMEs.',
+    footer: [
+      { icon: 'fa-rocket', label: 'Venture' },
+      { icon: 'fa-cloud', label: 'Cloud platforms' },
+      { icon: 'fa-mobile-screen', label: 'Web & mobile' },
+    ],
+    emoji: '🚀',
+    href: 'https://noventra-rho.vercel.app',
+  },
+  {
+    tag: { label: 'Project & Research', cls: 'bg-cyan/10 text-cyan border border-cyan/20' },
+    date: 'Full-stack app',
+    title: 'Crescendo – Full-Stack Music Streaming App',
+    desc: 'Built a Spotify-inspired streaming platform end to end — responsive front-end UI, back-end services, authentication and dynamic content rendering.',
+    footer: [
+      { icon: 'fa-node', label: 'Node.js' },
+      { icon: 'fa-leaf', label: 'MongoDB' },
+      { icon: 'fa-fire', label: 'Firebase' },
     ],
     emoji: '🎵',
   },
@@ -53,6 +79,30 @@ const activities = [
       { icon: 'fa-code', label: 'Code Fair' },
     ],
     emoji: '📜',
+  },
+  {
+    tag: { label: 'Leadership', cls: 'bg-blue-500/10 text-blue-400 border border-blue-500/25' },
+    date: '2024 – 2025',
+    title: 'Public Relations Officer, Academic Board',
+    desc: 'Managed board communications and publicity, serving as liaison between the Academic Board and the wider student body at KNUST.',
+    footer: [
+      { icon: 'fa-bullhorn', label: 'Communications' },
+      { icon: 'fa-users', label: 'Academic Board' },
+      { icon: 'fa-university', label: 'KNUST' },
+    ],
+    emoji: '📣',
+  },
+  {
+    tag: { label: 'Leadership', cls: 'bg-blue-500/10 text-blue-400 border border-blue-500/25' },
+    date: 'Jan 2023 – Present',
+    title: 'Course Representative, Class of 2026',
+    desc: 'Elected liaison for 500+ students; present course feedback to faculty and represent the class at departmental and academic board meetings.',
+    footer: [
+      { icon: 'fa-users', label: '500+ students' },
+      { icon: 'fa-comment-dots', label: 'Course feedback' },
+      { icon: 'fa-university', label: 'KNUST' },
+    ],
+    emoji: '🎓',
   },
 ]
 
@@ -98,7 +148,21 @@ function ActivityCard({ activity, index }) {
         {activity.emoji}
       </motion.div>
 
-      <h4 className="text-base font-semibold mb-2 leading-snug">{activity.title}</h4>
+      <h4 className="text-base font-semibold mb-2 leading-snug">
+        {activity.href ? (
+          <a
+            href={activity.href}
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-cyan transition-colors inline-flex items-center gap-1.5"
+          >
+            {activity.title}
+            <i className="fas fa-arrow-up-right-from-square text-xs opacity-60" />
+          </a>
+        ) : (
+          activity.title
+        )}
+      </h4>
       <p className={`text-slate-400 text-sm leading-relaxed ${activity.bullets ? 'mb-3' : 'mb-5'}`}>{activity.desc}</p>
 
       {activity.bullets && (
@@ -133,7 +197,19 @@ function ActivityCard({ activity, index }) {
 
 export default function Activities() {
   return (
-    <section id="activities" className="relative z-10 section-padding bg-bg-2">
+    <section id="activities" className="relative z-10 section-padding bg-bg-2 overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none">
+        <DotField
+          dotRadius={1.5}
+          dotSpacing={22}
+          bulgeStrength={50}
+          glowRadius={140}
+          gradientFrom="rgba(0, 212, 255, 0.12)"
+          gradientTo="rgba(124, 58, 237, 0.1)"
+          glowColor="#0a0f16"
+        />
+      </div>
+
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}

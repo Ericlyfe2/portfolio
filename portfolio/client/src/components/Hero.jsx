@@ -1,13 +1,15 @@
 import { useEffect, useState, useRef } from 'react'
 import { motion } from 'framer-motion'
+import Aurora from './Aurora'
 import Hero3DObject from './Hero3DObject'
+import DecryptedText from './DecryptedText'
 
 const phrases = [
-  'Student @ KNUST',
-  'DTI Intern @ Volta River Authority',
+  'Software Engineering & Cybersecurity Intern @ VRA',
+  'Final-Year BSc Computer Science @ KNUST',
+  'Full-Stack Developer · Python, C#/.NET, Node.js',
   'Cybersecurity & Network Administration',
-  'Data Analysis · Web3 & Blockchain',
-  'Python & C# Developer',
+  'MySQL · MongoDB · Cloud & Web3',
 ]
 
 function useTypewriter() {
@@ -148,6 +150,14 @@ export default function Hero() {
 
   return (
     <section id="hero" className="relative z-10 min-h-screen flex items-center px-[10%] overflow-hidden">
+      <div className="absolute inset-0 opacity-40">
+        <Aurora
+          colorStops={['#00d4ff', '#7c3aed', '#050810']}
+          amplitude={0.8}
+          blend={0.3}
+          speed={0.5}
+        />
+      </div>
       <Hero3DObject />
 
       <motion.div
@@ -174,7 +184,17 @@ export default function Hero() {
           className="text-5xl md:text-7xl font-bold leading-tight mb-4"
         >
           Hi, I&apos;m{' '}
-          <span className="gradient-text">Eric Asante</span>
+          <DecryptedText
+            text="Eric Asante"
+            animateOn="hover"
+            sequential
+            revealDirection="start"
+            speed={35}
+            maxIterations={8}
+            useOriginalCharsOnly
+            className="gradient-text"
+            encryptedClassName="text-slate-500"
+          />
         </motion.h1>
 
         <motion.div
@@ -193,9 +213,10 @@ export default function Hero() {
           variants={itemVariants}
           className="text-slate-400 leading-relaxed max-w-xl mb-9 text-base md:text-lg"
         >
-          Computer Science student at KNUST. Cybersecurity, network administration, data analysis,
-          Web3 &amp; blockchain — building with Python &amp; C#. Recently Academic Head at KNUST;
-          DTI intern at Volta River Authority.
+          Software engineering &amp; cybersecurity intern at the Volta River Authority (DTI Office), building and
+          securing applications inside a national critical-infrastructure environment. Full-stack developer in
+          Python, C#/.NET, Node.js, MySQL &amp; MongoDB — final-year BSc Computer Science candidate at KNUST (2026)
+          and elected leader representing 500+ students.
         </motion.p>
 
         <motion.div variants={itemVariants} className="flex flex-wrap gap-4">
@@ -221,8 +242,8 @@ export default function Hero() {
         >
           <StatItem target={3} label="Top skills" />
           <StatItem target={2} label="Internships completed" />
-          <StatItem target={4} label="Languages" />
-          <StatItem target={3} label="Experience entries" />
+          <StatItem target={3} label="Languages" />
+          <StatItem target={3} label="Featured projects" />
         </motion.div>
       </motion.div>
 
