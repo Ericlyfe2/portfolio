@@ -43,8 +43,10 @@ function FloatingShape({ position, rotation, color, type, speed, scale }) {
   )
 }
 
+const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+
 function Shapes() {
-  const shapes = useMemo(() => [
+  const allShapes = useMemo(() => [
     { position: [-4, 2, -5], rotation: [0.5, 0.8, 0], color: '#00d4ff', type: 'torus', speed: 0.4, scale: 1.2 },
     { position: [5, -3, -8], rotation: [0.2, 1.2, 0.5], color: '#7c3aed', type: 'icosa', speed: 0.3, scale: 1 },
     { position: [-3, -4, -10], rotation: [0.8, 0.3, 0.1], color: '#00ff88', type: 'octa', speed: 0.5, scale: 0.9 },
@@ -52,6 +54,8 @@ function Shapes() {
     { position: [0, -5, -12], rotation: [0.3, 0.9, 0.2], color: '#00d4ff', type: 'icosa', speed: 0.2, scale: 1.4 },
     { position: [-6, 5, -7], rotation: [0.7, 0.2, 0.6], color: '#00ff88', type: 'octa', speed: 0.45, scale: 0.7 },
   ], [])
+
+  const shapes = isMobile ? allShapes.slice(0, 3) : allShapes
 
   return shapes.map((s, i) => <FloatingShape key={i} {...s} />)
 }
@@ -61,8 +65,8 @@ export default function Scene3D() {
     <div className="fixed inset-0 z-0 pointer-events-none">
       <Canvas
         camera={{ position: [0, 0, 8], fov: 60 }}
-        dpr={[1, 1.5]}
-        gl={{ antialias: true, alpha: true }}
+        dpr={isMobile ? 1 : [1, 1.5]}
+        gl={{ antialias: !isMobile, alpha: true }}
         style={{ background: 'transparent' }}
       >
         <ambientLight intensity={0.4} />

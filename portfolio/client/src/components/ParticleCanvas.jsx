@@ -24,7 +24,7 @@ export default function ParticleCanvas() {
     window.addEventListener('mouseleave', () => { mouse.x = -1000; mouse.y = -1000 })
 
     const COLORS = ['#00d4ff', '#7c3aed', '#00ff88', '#a855f7']
-    const COUNT = 120
+    const COUNT = window.innerWidth < 768 ? 35 : 70
 
     const particles = Array.from({ length: COUNT }, () => ({
       x: Math.random() * canvas.width,
@@ -42,6 +42,10 @@ export default function ParticleCanvas() {
     let time = 0
 
     const draw = () => {
+      if (document.hidden) {
+        animId = requestAnimationFrame(draw)
+        return
+      }
       time += 0.016
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 

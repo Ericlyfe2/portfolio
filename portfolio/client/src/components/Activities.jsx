@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion'
 import DotField from './DotField'
-import ElectricBorder from './ElectricBorder'
 
 const activities = [
   {
@@ -117,14 +116,13 @@ const cardVariants = {
 
 function ActivityCard({ activity, index }) {
   return (
-    <ElectricBorder color="#00d4ff" speed={0.7} chaos={0.06} borderRadius={16}>
     <motion.div
       custom={index}
       variants={cardVariants}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: '-30px' }}
-      className="relative group glass rounded-2xl p-7 overflow-hidden transition-all duration-500 hover:shadow-card"
+      className="relative group glass rounded-2xl p-7 overflow-hidden transition-all duration-500 hover:shadow-card hover:border-cyan/40"
       whileHover={{ y: -8, transition: { duration: 0.2 } }}
     >
       <motion.div
@@ -194,7 +192,6 @@ function ActivityCard({ activity, index }) {
         ))}
       </div>
     </motion.div>
-    </ElectricBorder>
   )
 }
 
